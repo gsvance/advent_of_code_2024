@@ -1,4 +1,4 @@
-# advent\_of\_code\_2024
+# Advent of Code 2024
 
 My solutions to Advent of Code 2024 in Python
 
