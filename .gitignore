@@ -4,7 +4,7 @@ __pycache__/
 
 # Advent of Code input files to ignore
 example*.txt
-input*.txt
+input.txt
 
 # Just-for-fun output file from Dec 14 part 2
 dec_14/tree.txt
