@@ -38,7 +38,7 @@ def part_1(fname):
     num_steps = 2000
     for _ in range(num_steps):
         secrets = evolve(secrets)
-    print(int(secrets.sum()))
+    print('part 1:', int(secrets.sum()))
 
 
 def price(secret):
@@ -68,7 +68,7 @@ def part_2(fname):
             except KeyError:
                 bananas_by_diffs[my_diffs] = my_price
             bought.add(my_diffs)
-    print(max(bananas_by_diffs.values()))
+    print('part 2:', max(bananas_by_diffs.values()))
 
 
 if __name__ == '__main__':

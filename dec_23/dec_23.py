@@ -38,7 +38,7 @@ def part_1(fname):
                 continue
             computer_triple = frozenset({t_computer, computer_1, computer_2})
             computer_triples.add(computer_triple)
-    print(len(computer_triples))
+    print('part 1:', len(computer_triples))
 
 
 def part_2(fname):
@@ -66,6 +66,7 @@ def part_2(fname):
                 computer_groups[size].add(group)
     assert len(computer_groups[size - 1]) == 1
     lan_party = computer_groups[size - 1].pop()
+    print('part 2:', end=' ')
     print(*sorted(lan_party), sep=',')
 
 

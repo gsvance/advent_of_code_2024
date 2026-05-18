@@ -1,9 +1,10 @@
+from collections.abc import Hashable
 from dataclasses import dataclass, field
 from enum import StrEnum
 import heapq
 import itertools as it
 import sys
-from typing import Final, Generic, Hashable, Iterator, Self, TypeVar
+from typing import Final, Generic, Iterator, Self, TypeVar
 
 
 V = TypeVar('V', bound=Hashable)
@@ -182,7 +183,7 @@ class MemorySpace:
 
 
 def minimum_steps_to_exit(
-    memory_space: MemorySpace, start_point: Point, exit_point: Point
+    memory_space: MemorySpace, start_point: Point, exit_point: Point,
 ) -> int:
     graph = memory_space.as_graph()
     return dijkstra_shortest_path(graph, start_point, frozenset([exit_point]))
@@ -201,7 +202,10 @@ def part_1(fname: str) -> None:
         memory_space.set(fallen_byte, Status.CORRUPTED)
     start_point = Point(x=0, y=0)
     exit_point = Point(x=memory_space.x_max, y=memory_space.y_max)
-    print(minimum_steps_to_exit(memory_space, start_point, exit_point))
+    print(
+        'part 1:',
+        minimum_steps_to_exit(memory_space, start_point, exit_point),
+    )
 
 
 def check_blocking_byte(
@@ -254,6 +258,7 @@ def part_2(fname: str) -> None:
     else:
         memory_space = MemorySpace(x_max=70, y_max=70)
     i = minimum_blocking_bytes(falling_bytes, memory_space)
+    print('part 2:', end=' ')
     print(falling_bytes[i].x, falling_bytes[i].y, sep=',')
 
 

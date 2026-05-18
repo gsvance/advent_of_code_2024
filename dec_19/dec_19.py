@@ -19,7 +19,7 @@ def part_1(fname):
     towels = tuple(towel.strip() for towel in towels_part.split(', '))
     designs = [design.strip() for design in designs_part.split('\n')]
     num_possible = sum(1 for design in designs if is_possible(design, towels))
-    print(num_possible)
+    print('part 1:', num_possible)
 
 
 @cache
@@ -41,7 +41,7 @@ def part_2(fname):
     num_arrangements = sum(
         count_arrangements(design, towels) for design in designs
     )
-    print(num_arrangements)
+    print('part 2:', num_arrangements)
 
 
 if __name__ == '__main__':

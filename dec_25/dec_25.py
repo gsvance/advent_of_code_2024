@@ -84,11 +84,11 @@ def part_1(fname: str) -> None:
             if not isinstance(key, Key):
                 continue
             num_fitting_pairs += int(fit_together(lock, key))
-    print(num_fitting_pairs)
+    print('part 1:', num_fitting_pairs)
 
 
 def part_2(fname: str) -> None:
-    pass
+    print('part 2:', '*')
 
 
 if __name__ == '__main__':
