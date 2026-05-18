@@ -1,9 +1,10 @@
+from collections.abc import Hashable
 from dataclasses import dataclass, field
 from enum import Enum
 import heapq
 import itertools as it
 import sys
-from typing import Final, Generic, Hashable, Iterator, Self, TypeVar
+from typing import Final, Generic, Iterator, Self, TypeVar
 
 
 V = TypeVar('V', bound=Hashable)

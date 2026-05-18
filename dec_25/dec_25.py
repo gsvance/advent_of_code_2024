@@ -1,3 +1,4 @@
+import itertools
 import sys
 from typing import Final
 
@@ -5,12 +6,13 @@ from typing import Final
 FILLED: Final[str] = '#'
 EMPTY: Final[str] = '.'
 
-
 N_ROWS: Final[int] = 7
 N_COLS: Final[int] = 5
 
 
 class Schematic:
+
+    __slots__ = ('rows',)
 
     def __init__(self, string: str) -> None:
         self.rows: list[list[str]] = []
@@ -28,6 +30,8 @@ class Schematic:
 
 class Lock(Schematic):
 
+    __slots__ = ('heights',)
+
     def __init__(self, string: str) -> None:
         super().__init__(string)
         assert self.rows[0] == [FILLED] * N_COLS
@@ -41,6 +45,8 @@ class Lock(Schematic):
 
 
 class Key(Schematic):
+
+    __slots__ = ('heights',)
 
     def __init__(self, string: str) -> None:
         super().__init__(string)
@@ -77,17 +83,15 @@ def part_1(fname: str) -> None:
         for section in schematics_string.strip().split('\n\n')
     ]
     num_fitting_pairs = 0
-    for lock in schematics:
-        if not isinstance(lock, Lock):
-            continue
-        for key in schematics:
-            if not isinstance(key, Key):
-                continue
+    for lock, key in itertools.product(schematics, schematics):
+        if isinstance(lock, Lock) and isinstance(key, Key):
             num_fitting_pairs += int(fit_together(lock, key))
     print('part 1:', num_fitting_pairs)
 
 
 def part_2(fname: str) -> None:
+    # with open(fname, 'r', encoding='ascii') as f:
+    #    schematics_string = f.read()
     print('part 2:', '*')
 
 

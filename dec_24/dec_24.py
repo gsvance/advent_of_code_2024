@@ -109,6 +109,7 @@ class System:
                 continue
 
             if this_wire in self.already_simulating:
+                self.already_simulating.clear()
                 raise SystemLoopError('simulated system has a loop!')
             self.already_simulating.add(this_wire)
             self.simulate([gate.left_wire, gate.right_wire])
@@ -153,7 +154,6 @@ class AdvancedSystem(System):
         self.values.update(self.saved_values)
         for gate in self.gates.values():
             gate.value = None
-        self.already_simulating.clear()
 
     def swap_wires(self, wire_1: str, wire_2: str) -> None:
         assert wire_1 != wire_2
@@ -190,10 +190,19 @@ class AdvancedSystem(System):
             assert wire in self.values
             self.values[wire] = int(number & mask != 0)
 
-    def gates_with_values(self) -> Iterator[str]:
+    def iter_value_wires(self) -> Iterator[str]:
+        yield from self.values.keys()
+
+    def iter_gate_wires(self) -> Iterator[str]:
+        yield from self.gates.keys()
+
+    def iter_valued_gates(self) -> Iterator[str]:
         for wire, gate in self.gates.items():
             if gate.value is not None:
                 yield wire
+
+    def iter_swapped_wires(self) -> Iterator[str]:
+        yield from itertools.chain.from_iterable(self.wire_swaps)
 
 
 def get_random_binary(number_of_bits: int) -> int:
@@ -220,17 +229,16 @@ def categorize_gate_wires(
     z_wires = system.find_wires('z')
 
     categorized_wires: dict[str, set[str]] = {
-        'value': set(system.values.keys()),
-        'swapped': set(itertools.chain(*(system.wire_swaps))),
+        'value': set(system.iter_value_wires()),
+        'swapped': set(system.iter_swapped_wires()),
         'later': (
-            set(system.gates.keys())
-            - set(itertools.chain(*(system.wire_swaps)))
+            set(system.iter_gate_wires()) - set(system.iter_swapped_wires())
         ),
         'suspect': set(),
         'fine': set(),
     }
 
-    for bits, z_wire in enumerate(reversed(z_wires), start=1):
+    for bits in range(1, len(z_wires) + 1):
         gates_with_values: set[str] | None = None
         failed = False
         for _ in range(RANDOMIZED_SAMPLES):
@@ -242,7 +250,7 @@ def categorize_gate_wires(
             system.insert_number('y', y)
             if gates_with_values is None:
                 system.simulate(z_wires[-bits:])
-                gates_with_values = set(system.gates_with_values())
+                gates_with_values = set(system.iter_valued_gates())
             system.simulate()
             z = system.extract_number('z')
 

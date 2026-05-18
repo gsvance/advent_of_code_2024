@@ -3,7 +3,7 @@ import sys
 
 
 @cache
-def is_possible(design, towels):
+def is_possible(design: str, towels: tuple[str, ...]) -> bool:
     if design == '':
         return True
     for towel in towels:
@@ -13,8 +13,8 @@ def is_possible(design, towels):
     return False
 
 
-def part_1(fname):
-    with open(fname, 'r', encoding='utf-8') as f:
+def part_1(fname: str) -> None:
+    with open(fname, 'r', encoding='ascii') as f:
         towels_part, designs_part = f.read().strip().split('\n\n')
     towels = tuple(towel.strip() for towel in towels_part.split(', '))
     designs = [design.strip() for design in designs_part.split('\n')]
@@ -23,7 +23,7 @@ def part_1(fname):
 
 
 @cache
-def count_arrangements(design, towels):
+def count_arrangements(design: str, towels: tuple[str, ...]) -> int:
     if design == '':
         return 1
     count = 0
@@ -33,8 +33,8 @@ def count_arrangements(design, towels):
     return count
 
 
-def part_2(fname):
-    with open(fname, 'r', encoding='utf-8') as f:
+def part_2(fname: str) -> None:
+    with open(fname, 'r', encoding='ascii') as f:
         towels_part, designs_part = f.read().strip().split('\n\n')
     towels = tuple(towel.strip() for towel in towels_part.split(', '))
     designs = [design.strip() for design in designs_part.split('\n')]

@@ -11,6 +11,7 @@ V = TypeVar('V', bound=Hashable)
 
 
 class Graph(Generic[V]):
+
     __slots__ = ('edges_from',)
 
     def __init__(self) -> None:
@@ -58,6 +59,7 @@ class PriorityItem(Generic[D]):
 
 
 class PriorityQueue(Generic[D]):
+
     __slots__ = ('heap', 'entry_finder')
 
     def __init__(self) -> None:
@@ -92,7 +94,7 @@ class DijkstraError(Exception):
 
 
 def dijkstra_shortest_path(
-    graph: Graph[V], source: V, destinations: frozenset[V]
+    graph: Graph[V], source: V, destinations: frozenset[V],
 ) -> int:
     distance: dict[V, int] = {vertex: HUGE for vertex in graph.vertices()}
     distance[source] = 0
@@ -145,6 +147,7 @@ class Status(StrEnum):
 
 
 class MemorySpace:
+
     __slots__ = ('x_max', 'y_max', 'coords')
 
     def __init__(self, x_max: int, y_max: int) -> None:
@@ -167,7 +170,7 @@ class MemorySpace:
 
     def set(self, point: Point, status: Status) -> None:
         if point not in self.coords:
-            raise KeyError
+            raise KeyError(point)
         self.coords[point] = status
 
     def as_graph(self) -> Graph[Point]:
@@ -190,7 +193,7 @@ def minimum_steps_to_exit(
 
 
 def part_1(fname: str) -> None:
-    with open(fname, 'r', encoding='utf-8') as f:
+    with open(fname, 'r', encoding='ascii') as f:
         falling_bytes = list(map(parse_byte, f.read().strip().split('\n')))
     if len(falling_bytes) < 100:
         memory_space = MemorySpace(x_max=6, y_max=6)
@@ -202,14 +205,12 @@ def part_1(fname: str) -> None:
         memory_space.set(fallen_byte, Status.CORRUPTED)
     start_point = Point(x=0, y=0)
     exit_point = Point(x=memory_space.x_max, y=memory_space.y_max)
-    print(
-        'part 1:',
-        minimum_steps_to_exit(memory_space, start_point, exit_point),
-    )
+    min_steps = minimum_steps_to_exit(memory_space, start_point, exit_point)
+    print('part 1:', min_steps)
 
 
 def check_blocking_byte(
-    falling_bytes: list[Point], memory_space: MemorySpace, i: int
+    falling_bytes: list[Point], memory_space: MemorySpace, i: int,
 ) -> int:
     mem = MemorySpace(x_max=memory_space.x_max, y_max=memory_space.y_max)
     start_point = Point(x=0, y=0)
@@ -251,7 +252,7 @@ def minimum_blocking_bytes(
 
 
 def part_2(fname: str) -> None:
-    with open(fname, 'r', encoding='utf-8') as f:
+    with open(fname, 'r', encoding='ascii') as f:
         falling_bytes = list(map(parse_byte, f.read().strip().split('\n')))
     if len(falling_bytes) < 100:
         memory_space = MemorySpace(x_max=6, y_max=6)
